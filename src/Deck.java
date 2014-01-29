@@ -58,22 +58,20 @@ public class Deck {
      * @return value The numerical value of the card
      */
     public void dealCards(ArrayList<Player> players) {
-        
-        
-            while (length() != 0) {
-                for (int i = 0; i < players.size(); i++) {
-                    if (players.get(i) != null) {
-                        int temp = (int) (Math.random() * 52);
+        while (length() != 0) {
+            for (int i = 0; i < players.size(); i++) {
+                if (players.get(i) != null) {
+                    int temp = (int) (Math.random() * 52);
 
-                        while (cards[temp] == null) {
-                            temp = (int) (Math.random() * 52);
-                        }
-                        Card c = cards[temp];
-                        cards[temp] = null;
-                        players.get(i).addCard(c);            
-                    }           
-                }       
-            }
+                    while (cards[temp] == null) {
+                        temp = (int) (Math.random() * 52);
+                    }
+                    Card c = cards[temp];
+                    cards[temp] = null;
+                    players.get(i).addCard(c);            
+                }           
+            }       
+        }
     }
     
     public void removeLastCard() {
