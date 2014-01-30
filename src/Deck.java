@@ -74,10 +74,14 @@ public class Deck {
         }
     }
     
+    /**
+     * Removes the last card in the deck
+     */
     public void removeLastCard() {
         cards[51] = null;
     }
 
+    @Override
     public String toString() {
         String result = "";
         if (cards.length > 0) result = result + "[";
@@ -92,6 +96,11 @@ public class Deck {
         return result;
     }
 
+    /**
+     * Returns the deck in an array
+     *
+     * @return cards the backing array
+     */
     public Card[] getCards() {
         return cards;
     }

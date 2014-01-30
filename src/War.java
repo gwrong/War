@@ -1,3 +1,6 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
 /**
  *
  * @date 7/3/12
@@ -15,9 +18,6 @@
  * 
  * 
  */
-import java.util.Scanner;
-import java.util.ArrayList;
-
 public class War {
 
     private Deck deck;
@@ -49,24 +49,23 @@ public class War {
     private boolean infiniteGame;
     private int roundCount;
     
-    public War(Player player1, Player player2, Player player3, Player player4) {
+    private int startingHandFlag;
+    private int returningCardFlag;
+    
+    /**
+     * Constructs a game of War
+     * 
+     * @param player1 The first player
+     * @param player2 The second player
+     */
+    public War(Player player1, Player player2) {
         winners = new ArrayList<Integer>();
         players = new ArrayList<Player>();
         p1 = player1;
         players.add(p1);
         p2 = player2;
         players.add(p2);
-        if (player3 != null) {
-            p3 = player3;
-            players.add(p3);
-            numPlayers++;
-        }
-        if (player4 != null) {
-            p4 = player4;
-            players.add(p4);
-            numPlayers++;
-        }
-
+      
         deck = new Deck();
         battle = new Card[numPlayers];
         tieDiscard = new ArrayList<Card>(2 * numPlayers);
@@ -77,20 +76,45 @@ public class War {
  
     }
     
-    
+    /**
+     * Sets up the game of War, deals cards
+     * Various if statements check for what
+     * sorting, if any, to do at the start of the game
+     * to player 1
+     * Flags
+     * 0 - Don't sort
+     * 1 - Sort high to low
+     * 2 - Sort high to low
+     * 3 - Sort alternating high to low bottom
+     * 4 - Sort alternating low to high bottom
+     * 5 - Sort alternating high to low top
+     * 6 - Sort alternating low to high top
+     */
     public void setUpWar() {
 
         deck.dealCards(players);
-//        players.get(0).sortCardsAltHLBottom(); //The sorting starting hand line
-//        System.out.println(toString());
+        if (startingHandFlag == 1) {
+        	players.get(0).sortCardsLtoH();
+        } else if (startingHandFlag == 2) {
+        	players.get(0).sortCardsHtoL();
+        } else if (startingHandFlag == 3) {
+        	players.get(0).sortCardsAltHLBottom();
+        } else if (startingHandFlag == 4) {
+        	players.get(0).sortCardsAltLHBottom();
+        } else if (startingHandFlag == 5) {
+        	players.get(0).sortCardsAltHLTop();
+        } else if (startingHandFlag == 6) {
+        	players.get(0).sortCardsAltLHTop();
+        } 
         for (int i = 0; i < players.size(); i++) {
             players.get(i).updateHandStrength();
         }
     }
     
-    
+    /**
+     * Takes the players' cards on each turn
+     */
     public void collectCards(){
-
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).length() == 0) {
                 players.remove(i);
@@ -105,11 +129,14 @@ public class War {
         for (int i = 0; i < players.size(); i++) {
             battle[players.get(i).getPlayerNumber() - 1] = players.get(i).playCard();
         }
-        //System.out.println(toString());
     }
     
-    //Returns the index in players of the winning player of a battle in war
-    //If the battle is tied the players that tied face off 
+    /**
+     * Returns the index in players of the winning player of a battle in war
+     * If the battle is tied the players that tied face off
+     * 
+     * @return int the Index of the player
+     */
     public int declareBattleWinner() {
         if (isOver) return -1;
         winners.clear();
@@ -124,7 +151,6 @@ public class War {
             }
         }
             
-        
         for (int i = 1; i < battle.length; i++) {
             if (battle[i] != null) {
                 Card current = battle[i];
@@ -139,8 +165,7 @@ public class War {
                     for (int j = 0; j < players.size(); j++) {
                         if (i + 1 == players.get(j).getPlayerNumber()) {
                             winners.add(players.get(j).getPlayerNumber());
-                            //System.out.println(toString());
-                        }
+                    	}
                     }
                 }
             }
@@ -150,7 +175,6 @@ public class War {
             for (int j = 0; j < battle.length; j++) {
                 if (battle[j].getValue() == highest.getValue()) return players.get(j).getPlayerNumber();
             }
-            //System.out.println(toString());
         }
         
         if (winners.size() > 1) faceOffCount++;
@@ -220,8 +244,6 @@ public class War {
                             }
                             else {
                                 players.get(j).playCard(tieDecision);
-                                //System.out.println(toString());
-                                
                             }
                         }
                         
@@ -231,7 +253,6 @@ public class War {
                
             highest = tieDecision.get(tieDecision.size() - winners.size());
             for (int j = tieDecision.size() - winners.size(); j < tieDecision.size(); j++) {
-                //System.out.println(toString());
 
                 Card current = tieDecision.get(j);
                 if (current.getValue() < highest.getValue()) {
@@ -261,7 +282,6 @@ public class War {
                 
                 else if (current.getValue() > highest.getValue()) {
                     highest = current;
-                    //System.out.println(toString());
 
                     if (winners.size() == 2) {
                         if (j % 2 != 0) {
@@ -278,7 +298,6 @@ public class War {
                 
             }
         }
-        //System.out.println(toString());
 
         for (int i = 0; i < players.size(); i++) {
             if (winners.get(0) == players.get(i).getPlayerNumber()){            
@@ -289,6 +308,18 @@ public class War {
         
     }
     
+    /**
+     * Distributes the discarded cards during the turn to the winner
+     * Flag Values
+     * 0 - Random order
+     * 1 - Return low high, high low
+     * 2 - Return high low, low high
+     * 3 - Return high low, high low
+     * 4 - Return low high, low high
+     * 5 - Return same order
+     * 
+     * @param winner The player who won the round
+     */
     public void distributeWinnings(Player winner) {
         int pnumber = winner.getPlayerNumber();
         if (tieDiscard.size() > 0) {
@@ -306,172 +337,165 @@ public class War {
         }
         
         while (cards.size() > 0) {
-            
-            
-            //This is for switching between low high and high low
-            
-//            if (winner.getPlayerNumber() == 1) {
-//                if (winner.getSwitch() == 0) {
-//                    if (cards.get(1).getValue() > cards.get(0).getValue()) {
-//                        winner.addCard(cards.get(1));
-//                        cards.remove(1);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//
-//                    }
-//                    else {
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    winner.changeSwitch();
-//                }
-//                
-//                else if (winner.getSwitch() == 1) {
-//                    if (cards.get(1).getValue() < cards.get(0).getValue()) {
-//                        winner.addCard(cards.get(1));
-//                        cards.remove(1);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    
-//                    else {
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    winner.changeSwitch();
-//                }
-//            }
-            
-            
-            
-            
-            
-            
-            
-////            This is for switching between high low and low high 
-//            
-//            if (winner.getPlayerNumber() == 1) {
-//                if (winner.getSwitch() == 0) {
-//                    if (cards.get(1).getValue() > cards.get(0).getValue()) {
-//                        winner.addCard(cards.get(1));
-//                        cards.remove(1);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//
-//                    }
-//                    else {
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    winner.changeSwitch();
-//                }
-//                
-//                else if (winner.getSwitch() == 1) {
-//                    if (cards.get(1).getValue() < cards.get(0).getValue()) {
-//                        winner.addCard(cards.get(1));
-//                        cards.remove(1);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    
-//                    else {
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                        winner.addCard(cards.get(0));
-//                        cards.remove(0);
-//                    }
-//                    winner.changeSwitch();
-//                }
-//            }
-                
-                
-            
-            
-////          This is for returning cards in the same order they were played
-            //winner.addCard(cards.get(0));
-            //cards.remove(0);
+            if (returningCardFlag == 1) {
+            	//returning low high, high low
+				if (winner.getPlayerNumber() == 1) {
+					if (winner.getSwitch() == 0) {
+						if (cards.get(1).getValue() > cards.get(0).getValue()) {
+				          winner.addCard(cards.get(1));
+				          cards.remove(1);
+				          winner.addCard(cards.get(0));
+				          cards.remove(0);
+						}
+						else {
+							 winner.addCard(cards.get(0));
+							 cards.remove(0);
+							 winner.addCard(cards.get(0));
+							 cards.remove(0);
+						}
+				        winner.changeSwitch();
+					}
+				  
+					else if (winner.getSwitch() == 1) {
+						  if (cards.get(1).getValue() < cards.get(0).getValue()) {
+						      winner.addCard(cards.get(1));
+						      cards.remove(1);
+						      winner.addCard(cards.get(0));
+						      cards.remove(0);
+						  } else {
+						      winner.addCard(cards.get(0));
+						      cards.remove(0);
+						      winner.addCard(cards.get(0));
+						      cards.remove(0);
+						  }
+				      winner.changeSwitch();
+				  	}
+				}
+            } else if (returningCardFlag == 2) {
+            	//returning high low, low high
+            	if (winner.getPlayerNumber() == 1) {
+            	    if (winner.getSwitch() == 0) {
+            	        if (cards.get(1).getValue() > cards.get(0).getValue()) {
+            	            winner.addCard(cards.get(1));
+            	            cards.remove(1);
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
 
+            	        }
+            	        else {
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
+            	        }
+            	        winner.changeSwitch();
+            	    }
+            	    
+            	    else if (winner.getSwitch() == 1) {
+            	        if (cards.get(1).getValue() < cards.get(0).getValue()) {
+            	            winner.addCard(cards.get(1));
+            	            cards.remove(1);
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
+            	        }
+            	        
+            	        else {
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
+            	            winner.addCard(cards.get(0));
+            	            cards.remove(0);
+            	        }
+            	        winner.changeSwitch();
+            	    }
+            	}
+            } else if (returningCardFlag == 3) {
+            	//Returning high low
+            	if (winner.getPlayerNumber() == 1) {
+            		if (cards.get(1).getValue() > cards.get(0).getValue()) {
+            	      winner.addCard(cards.get(1));
+            	      cards.remove(1);
+            	      winner.addCard(cards.get(0));
+            	      cards.remove(0);
 
-//            This is for returning cards in the order high low, with low being
-//            on the bottom of the deck
-//            if (winner.getPlayerNumber() == 1) {
-//                if (cards.get(1).getValue() > cards.get(0).getValue()) {
-//                  winner.addCard(cards.get(1));
-//                  cards.remove(1);
-//                  winner.addCard(cards.get(0));
-//                  cards.remove(0);
-//
-//                }
-//                else {
-//                    winner.addCard(cards.get(0));
-//                    cards.remove(0);
-//                    winner.addCard(cards.get(0));
-//                    cards.remove(0);
-//                }
-//                
-//            }
-            
-
-
-////            This is for returning cards in the order low high, with high being
-////            on the bottom of the deck
-//            if (winner.getPlayerNumber() == 1) {
-//                if (cards.get(1).getValue() < cards.get(0).getValue()) {
-//                    winner.addCard(cards.get(1));
-//                    cards.remove(1);
-//                    winner.addCard(cards.get(0));
-//                    cards.remove(0);
-//                }
-//                else {
-//                    winner.addCard(cards.get(0));
-//                    cards.remove(0);
-//                    winner.addCard(cards.get(0));
-//                    cards.remove(0);
-//                }
-//            }
-            
-
-//            else {
-            //Returning cards in a random order
-                int temp = (int) (Math.random() * cards.size());
+            	    }
+            	    else {
+            	        winner.addCard(cards.get(0));
+            	        cards.remove(0);
+            	        winner.addCard(cards.get(0));
+            	        cards.remove(0);
+            	    }
+            	    
+            	}
+            } else if (returningCardFlag == 4) {
+            	//Returning low high
+            	if (winner.getPlayerNumber() == 1) {
+            	    if (cards.get(1).getValue() < cards.get(0).getValue()) {
+            	        winner.addCard(cards.get(1));
+            	        cards.remove(1);
+            	        winner.addCard(cards.get(0));
+            	        cards.remove(0);
+            	    }
+            	    else {
+            	        winner.addCard(cards.get(0));
+            	        cards.remove(0);
+            	        winner.addCard(cards.get(0));
+            	        cards.remove(0);
+            	    }
+            	}
+            } else if (returningCardFlag == 5) {
+            	//Returning in the same way they were played
+            	winner.addCard(cards.get(0));
+                cards.remove(0);
+            } else {
+            	//Returning cards in a random order
+            	int temp = (int) (Math.random() * cards.size());
                 winner.addCard(cards.get(temp));
                 cards.remove(temp);
-//            }
-            
+            }                     
         }
         
         while (!tieDiscard.isEmpty()) {
-
-//            winner.addCard(tieDiscard.get(0));     //not randomized return of cards
-//            tieDiscard.remove(0);
-            
-            int temp = (int) (Math.random() * tieDiscard.size());
-            winner.addCard(tieDiscard.get(temp));
-            tieDiscard.remove(temp);
+    		if (returningCardFlag == 5) {
+    			//Return card in same order played
+    			winner.addCard(tieDiscard.get(0));
+                tieDiscard.remove(0);
+    		} else {
+    			//Return cards in random order
+    			int temp = (int) (Math.random() * tieDiscard.size());
+                winner.addCard(tieDiscard.get(temp));
+                tieDiscard.remove(temp);
+    		}
         }
         
         while (!tieDecision.isEmpty()) {
-//            winner.addCard(tieDecision.get(0));   //not randomized return of cards
-//            tieDecision.remove(0);
-            
-            int temp = (int) (Math.random() * tieDecision.size());
-            winner.addCard(tieDecision.get(temp));
-            tieDecision.remove(temp);
+        	if (returningCardFlag == 5) {
+        		//Return cards in the order they were played
+        		winner.addCard(tieDecision.get(0));
+            	tieDecision.remove(0);
+        	} else {
+        		//Returns card in random order
+        		int temp = (int) (Math.random() * tieDecision.size());
+                winner.addCard(tieDecision.get(temp));
+                tieDecision.remove(temp);
+        	} 
         }
     }
 
+    /**
+     * Tells if the game is over
+     * 
+     * @return boolean Whether or not the game is over
+     */
     public boolean isOver() {
         return isOver;
     }
-    
-    public void play() {
-        
+ 
+    /**
+     * The play method tells the game to start
+     */
+    public void play(int startingHandFlag, int returningCardFlag) {
+        this.startingHandFlag = startingHandFlag;
+        this.returningCardFlag = returningCardFlag;
         setUpWar();
         while (!isOver) {
             
@@ -491,16 +515,22 @@ public class War {
         }
     }
     
+    /**
+     * Computes the number of cards played in the game
+     * 
+     * @return int the number of cards played
+     */
     public int tallyCardsPlayed() {
         int count = 0;
         count = p1.getCardsPlayed() + p2.getCardsPlayed();
-        if (numPlayers > 2) {
-            count = count + p3.getCardsPlayed();
-            if (numPlayers > 3) count = count + p4.getCardsPlayed();
-        }
         return count;
     }
 
+    /**
+     * Computes statistics for this game
+     * 
+     * @return ArrayList<Integer> The stats
+     */
     public ArrayList<Integer> computeStatistics() {
         ArrayList<Integer> results = new ArrayList<Integer>();
         results.add(tallyCardsPlayed());

@@ -1,42 +1,41 @@
-Average Cards Played Per Game: 771.017
-Average Rounds Per Game: 324.43
-Average Battles Per Game: 305.09
-Average Wars Per Game 19.34
-Single Wars: 19340.0
-Double Wars: 1175
-Triple Wars: 78.0
-Quadruple Wars: 3.0
-Quintuple Wars: 0.0
+Number of games simulated: 100000
+Average Cards Played Per Game: 742.20456
+Average Rounds Per Game: 313
+Average Battles Per Game: 295.28667
+Average Wars Per Game 18.2861
+Single Wars: 1828610.0
+Double Wars: 106654
+Triple Wars: 6119.0
+Quadruple Wars: 349.0
+Quintuple Wars: 16.0
 Sextuple Wars: 0.0
 Septuple Wars: 0.0
 Octuple Wars: 0.0
-Max Cards Played: 5357
-Min Cards Played: 90
-Max Rounds: 2280
-Min Rounds: 26
-Max Battles: 2154
-Min Battles: 19
-Max Wars: 126
-Min Wars: 1
-Winner Hand Strength: 211.016
-Winning with under 208: 0.396
-Winning with over 208: 0.576
-Winning with 208: 0.028
-Avg Winner Ace Count: 2.265
-Winning with 0 aces: 0.022
-Winning with 1 ace: 0.169
-Winning with 2 aces: 0.416
-Winning with 3 aces: 0.308
-Winning with 4 aces: 0.085
-P(0): 0.20560747663551399
-P(1): 0.35429769392033544
-P(2): 0.5
-P(3): 0.6457023060796646
-P(4): 0.794392523364486
-Avg Winner War Wins: 11.35
-Finite Games: 1.0
-Infinite Games: 0.0
-Player 1 Wins: 517
-Player 2 Wins: 483
-Player 3 Wins: 0
-Player 4 Wins: 0
+Max Cards Played: 7436
+Min Cards Played: 50
+Max Rounds: 3127
+Min Rounds: 10
+Max Battles: 2935
+Min Battles: 6
+Max Wars: 192
+Min Wars: 0
+Winner Hand Strength: 211
+Winning with under 208: 0
+Winning with over 208: 0
+Winning with 208: 0
+Avg Winner Ace Count: 2
+Winning with 0 aces: 0.01539
+Winning with 1 ace: 0.15277
+Winning with 2 aces: 0.39262
+Winning with 3 aces: 0.34411
+Winning with 4 aces: 0.09511
+P(Winning with 0 aces): 0.1392760180995475
+P(Winning with 1 aces): 0.3074585412976976
+P(Winning with 2 aces): 0.5
+P(3 aces): 0.6925414587023024
+P(Winning with 4 aces): 0.8607239819004525
+Avg Winner War Wins: 10
+Finite Games: 1
+Infinite Games: 0
+Player 1 Wins: 52672
+Player 2 Wins: 47328

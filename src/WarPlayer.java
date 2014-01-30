@@ -1,3 +1,8 @@
+import java.util.ArrayList;
+import java.io.IOException;
+import java.io.PrintWriter;
+import javax.swing.JFrame;
+
 /**
  * WarPlayer contains the main method for running the card simulation
  * It keeps track of the stats for all games being simulated and 
@@ -7,27 +12,25 @@
  * @date 7/3/12
  * @author Graham Wright
  */
-
-import java.util.ArrayList;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 public class WarPlayer {
-
+	
 	/**
-	 * The main class, runs the game of War
+	 * Runs the War simulation, called from the ButtonListener
+	 * in WarGUI.java
+	 *
+	 * @param times The number of times to run the simulation
+	 * @param startingHandFlag Decides how, if at all, to sort 
+	 * 		  player 1's hand
+	 * @param returningCardFlag Decides how to return cards during
+	 * 	      play
 	 */
-    public static void main(String[] args) {
-
-        double times = 1000;
-    	
+	public static void runWar(int times, int startingHandFlag, int returningCardFlag) {
+	    	
         double battles = 0.0;
         double faceOffs = 0.0;
         double cardsPlayed = 0.0;
         int p1wins = 0;
         int p2wins = 0;
-        int p3wins = 0;
-        int p4wins = 0;
         int doubleWars = 0;
         double tripleWars = 0.0;
         double quadrupleWars = 0.0;
@@ -57,15 +60,17 @@ public class WarPlayer {
         int finiteGame = 0;
         int infiniteGame = 0;
         int roundCount = 0;
+
         
         for(int i = 0; i < times; i++) {
+        	if (i % 1000 == 0) {
+        		System.out.println("Game number " + i + " completed!");
+        	}
             Player p1 = new Player(1);
             Player p2 = new Player(2);
-            Player p3 = null;
-            Player p4 = null;
 
-            War game = new War(p1, p2, p3, p4);
-            game.play();
+            War game = new War(p1, p2);
+            game.play(startingHandFlag, returningCardFlag);
             stats = game.computeStatistics();
             cardsPlayed = cardsPlayed + stats.get(0);
             battles = battles + stats.get(1);
@@ -106,8 +111,6 @@ public class WarPlayer {
             int player = stats.get(3);
             if(player == 1) p1wins++;
             else if(player == 2) p2wins++;
-            else if(player == 3) p3wins++;
-            else if(player == 4) p4wins++;
         }
         
         winner0ace = winner0ace / times;
@@ -117,6 +120,7 @@ public class WarPlayer {
         winner4ace = winner4ace / times;
 
         String finalStats = "";
+        finalStats = finalStats + "Number of games simulated: " + times + "\n";
         finalStats = finalStats + "Average Cards Played Per Game: " + cardsPlayed / times + "\nAverage Rounds Per Game: " + roundCount / times
         + "\nAverage Battles Per Game: " + battles / times + "\nAverage Wars Per Game "
         + faceOffs / times + "\nSingle Wars: " + faceOffs + "\nDouble Wars: " + doubleWars + "\nTriple Wars: " + tripleWars + "\nQuadruple Wars: " + quadrupleWars +
@@ -128,13 +132,12 @@ public class WarPlayer {
         "\nWinning with 208: " + (times - (over208 + under208)) / times +
         "\nAvg Winner Ace Count: " + winnerAceCount / times + "\nWinning with 0 aces: " + winner0ace +
         "\nWinning with 1 ace: " + winner1ace + "\nWinning with 2 aces: " + winner2ace + "\nWinning with 3 aces: " + winner3ace +
-         "\nWinning with 4 aces: " + winner4ace + "\nP(0): " + (winner0ace / (winner4ace + winner0ace)) + "\nP(1): " + (winner1ace / (winner3ace + winner1ace)) +
-        "\nP(2): " + (winner2ace / (winner2ace + winner2ace)) + "\nP(3): " + (winner3ace / (winner1ace + winner3ace)) + "\nP(4): "
+         "\nWinning with 4 aces: " + winner4ace + "\nP(Winning with 0 aces): " + (winner0ace / (winner4ace + winner0ace)) + "\nP(Winning with 1 aces): " + (winner1ace / (winner3ace + winner1ace)) +
+        "\nP(Winning with 2 aces): " + (winner2ace / (winner2ace + winner2ace)) + "\nP(Winning with 3 aces): " + (winner3ace / (winner1ace + winner3ace)) + "\nP(Winning with 4 aces): "
         + (winner4ace / (winner0ace + winner4ace)) + "\nAvg Winner War Wins: " + (winnerWarWins / times) + "\nFinite Games: " + finiteGame / times +
         "\nInfinite Games: " + infiniteGame / times +     
                 
-        "\nPlayer 1 Wins: " + p1wins + "\nPlayer 2 Wins: " + p2wins
-        + "\nPlayer 3 Wins: " + p3wins + "\nPlayer 4 Wins: " + p4wins;
+        "\nPlayer 1 Wins: " + p1wins + "\nPlayer 2 Wins: " + p2wins;
         
         //Write the data to a file called "results.txt"
         PrintWriter writer = null;
@@ -142,12 +145,29 @@ public class WarPlayer {
         try {     	
         	writer = new PrintWriter("results.txt");
         } catch (IOException e) {
-        	System.out.println("FDSDFSDFSD");
+        	System.out.println("There was an error writing to the results file");
         }
-        System.out.println(finalStats);
+        //System.out.println(finalStats);
+        System.out.println("Results for " + times + " games written to results.txt");
         for (int i = 0; i < results.length; i++) {
         	writer.println(results[i]);
         }
     	writer.close();
+	}
+
+	/**
+	 * The main class, creates the GUI that allows the
+	 * user to control when to run the War simulation
+	 * from WarPlayer.runWar
+	 */
+    public static void main(String[] args) {
+
+       
+		//GUI components
+        JFrame frame = new JFrame("War Simulator");
+        WarGUI gui = new WarGUI();
+        frame.add(gui);
+        frame.pack();
+        frame.setVisible(true);
     }
 }
