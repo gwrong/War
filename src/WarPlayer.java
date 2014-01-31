@@ -24,7 +24,7 @@ public class WarPlayer {
 	 * @param returningCardFlag Decides how to return cards during
 	 * 	      play
 	 */
-	public static void runWar(int times, int startingHandFlag, int returningCardFlag) {
+	public static void runWar(double times, int startingHandFlag, int returningCardFlag) {
 	    	
         double battles = 0.0;
         double faceOffs = 0.0;
@@ -148,7 +148,7 @@ public class WarPlayer {
         	System.out.println("There was an error writing to the results file");
         }
         //System.out.println(finalStats);
-        System.out.println("Results for " + times + " games written to results.txt");
+        System.out.println("Results for " + (int) times + " games written to results.txt");
         for (int i = 0; i < results.length; i++) {
         	writer.println(results[i]);
         }

@@ -1,41 +1,41 @@
-Number of games simulated: 100000
-Average Cards Played Per Game: 742.20456
-Average Rounds Per Game: 313
-Average Battles Per Game: 295.28667
-Average Wars Per Game 18.2861
-Single Wars: 1828610.0
-Double Wars: 106654
-Triple Wars: 6119.0
-Quadruple Wars: 349.0
-Quintuple Wars: 16.0
+Number of games simulated: 10000.0
+Average Cards Played Per Game: 764.9454
+Average Rounds Per Game: 322.7765
+Average Battles Per Game: 303.8128
+Average Wars Per Game 18.9637
+Single Wars: 189637.0
+Double Wars: 11156
+Triple Wars: 638.0
+Quadruple Wars: 37.0
+Quintuple Wars: 1.0
 Sextuple Wars: 0.0
 Septuple Wars: 0.0
 Octuple Wars: 0.0
-Max Cards Played: 7436
-Min Cards Played: 50
-Max Rounds: 3127
-Min Rounds: 10
-Max Battles: 2935
-Min Battles: 6
-Max Wars: 192
+Max Cards Played: 5556
+Min Cards Played: 72
+Max Rounds: 2343
+Min Rounds: 19
+Max Battles: 2209
+Min Battles: 16
+Max Wars: 134
 Min Wars: 0
-Winner Hand Strength: 211
-Winning with under 208: 0
-Winning with over 208: 0
-Winning with 208: 0
-Avg Winner Ace Count: 2
-Winning with 0 aces: 0.01539
-Winning with 1 ace: 0.15277
-Winning with 2 aces: 0.39262
-Winning with 3 aces: 0.34411
-Winning with 4 aces: 0.09511
-P(Winning with 0 aces): 0.1392760180995475
-P(Winning with 1 aces): 0.3074585412976976
+Winner Hand Strength: 210.7889
+Winning with under 208: 0.4041
+Winning with over 208: 0.5701
+Winning with 208: 0.0258
+Avg Winner Ace Count: 2.3143
+Winning with 0 aces: 0.0199
+Winning with 1 ace: 0.166
+Winning with 2 aces: 0.3877
+Winning with 3 aces: 0.3327
+Winning with 4 aces: 0.0937
+P(Winning with 0 aces): 0.17517605633802816
+P(Winning with 1 aces): 0.33286545017044317
 P(Winning with 2 aces): 0.5
-P(3 aces): 0.6925414587023024
-P(Winning with 4 aces): 0.8607239819004525
-Avg Winner War Wins: 10
-Finite Games: 1
-Infinite Games: 0
-Player 1 Wins: 52672
-Player 2 Wins: 47328
+P(Winning with 3 aces): 0.6671345498295568
+P(Winning with 4 aces): 0.8248239436619719
+Avg Winner War Wins: 11.1863
+Finite Games: 1.0
+Infinite Games: 0.0
+Player 1 Wins: 4960
+Player 2 Wins: 5040

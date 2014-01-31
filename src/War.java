@@ -23,8 +23,6 @@ public class War {
     private Deck deck;
     private Player p1;
     private Player p2;
-    private Player p3;
-    private Player p4;
     private ArrayList<Player> players;
     private int numPlayers = 2;
     private Card[] battle;
