@@ -61,7 +61,6 @@ public class WarPlayer {
         int infiniteGame = 0;
         int roundCount = 0;
 
-        
         for(int i = 0; i < times; i++) {
         	if (i % 1000 == 0) {
         		System.out.println("Game number " + i + " completed!");
